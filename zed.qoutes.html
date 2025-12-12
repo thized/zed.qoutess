@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="zed.png" type="image/x-icon">
+  <title>Zed.Quotes - Discover Inspiration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #13131a;
+      --bg-card: #1a1a24;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b8;
+      --accent-purple: #8b5cf6;
+      --accent-pink: #ec4899;
+      --accent-blue: #3b82f6;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      background: rgba(26, 26, 36, 0.6);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 24px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 16px 12px 45px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent-purple);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: radial-gradient(circle at top, rgba(139, 92, 246, 0.1), transparent 70%);
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #a0a0b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+      color: white;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-purple);
+      background: var(--bg-secondary);
+    }
+
+    /* Categories */
+    .categories {
+      display: flex;
+      gap: 10px;
+      padding: 30px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-chip {
+      padding: 10px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .category-chip:hover {
+      border-color: var(--accent-purple);
+      color: var(--text-primary);
+    }
+
+    .category-chip.active {
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+      border-color: transparent;
+      color: white;
+    }
+
+    /* Quote Cards Grid */
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .quote-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-purple);
+      box-shadow: var(--shadow);
+    }
+
+    .quote-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .quote-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .author-info h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .category-tag {
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .quote-actions {
+      display: flex;
+      gap: 8px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 13px;
+    }
+
+    .action-btn:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent-purple);
+      color: var(--text-primary);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      position: relative;
+      animation: modalSlideIn 0.3s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 24px;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .modal-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .modal-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .modal-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 24px;
+      color: white;
+    }
+
+    .modal-author-info h3 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .quotes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-bar {
+        max-width: 100%;
+      }
+
+      .header-content {
+        flex-wrap: wrap;
+      }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+      color: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 2000;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">ZQ</div>
+        Zed.Quotes
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search quotes or authors...">
+      </div>
+      <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Discover Inspiration</h1>
+      <p>Explore thousands of quotes from the world's greatest minds</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="randomBtn">✨ Random Quote</button>
+        <button class="btn btn-secondary" id="dailyBtn">📅 Quote of the Day</button>
+        <button class="btn btn-secondary" id="addQuoteBtn">➕ Add Quote</button>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <div class="categories" id="categories">
+      <div class="category-chip active" data-category="All">All Quotes</div>
+      <div class="category-chip" data-category="Motivational">💪 Motivational</div>
+      <div class="category-chip" data-category="Romantic">❤️ Romantic</div>
+      <div class="category-chip" data-category="Life">🌟 Life</div>
+      <div class="category-chip" data-category="Wisdom">🧠 Wisdom</div>
+      <div class="category-chip" data-category="Friendship">🤝 Friendship</div>
+      <div class="category-chip" data-category="Success">🎯 Success</div>
+      <div class="category-chip" data-category="Happiness">😊 Happiness</div>
+    </div>
+
+    <!-- Quotes Grid -->
+    <div class="quotes-grid" id="quotesGrid"></div>
+  </div>
+
+  <!-- Quote Modal -->
+  <div class="modal" id="quoteModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">×</button>
+      <p class="modal-quote" id="modalQuote"></p>
+      <div class="modal-author">
+        <div class="modal-avatar" id="modalAvatar"></div>
+        <div class="modal-author-info">
+          <h3 id="modalAuthorName"></h3>
+          <span class="category-tag" id="modalCategory"></span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modalCopy">📋 Copy</button>
+        <button class="btn btn-secondary" id="modalShare">📤 Share</button>
+        <button class="btn btn-secondary" id="modalDownload">💾 Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample Quotes Data with more variety
+    const QUOTES_DATA = [
+      {id: 1, text: "The best way to predict the future is to create it.", author: "Peter Drucker", category: "Motivational"},
+      {id: 2, text: "Life is what happens when you're busy making other plans.", author: "John Lennon", category: "Life"},
+      {id: 3, text: "The only way to do great work is to love what you do.", author: "Steve Jobs", category: "Success"},
+      {id: 4, text: "Love is composed of a single soul inhabiting two bodies.", author: "Aristotle", category: "Romantic"},
+      {id: 5, text: "In the end, we only regret the chances we didn't take.", author: "Lewis Carroll", category: "Life"},
+      {id: 6, text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill", category: "Motivational"},
+      {id: 7, text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela", category: "Wisdom"},
+      {id: 8, text: "Friendship is born at that moment when one person says to another: What! You too?", author: "C.S. Lewis", category: "Friendship"},
+      {id: 9, text: "Happiness is not something ready made. It comes from your own actions.", author: "Dalai Lama", category: "Happiness"},
+      {id: 10, text: "The heart wants what it wants. There's no logic to these things.", author: "Woody Allen", category: "Romantic"},
+      {id: 11, text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt", category: "Motivational"},
+      {id: 12, text: "To live is the rarest thing in the world. Most people exist, that is all.", author: "Oscar Wilde", category: "Life"},
+      {id: 13, text: "The only true wisdom is in knowing you know nothing.", author: "Socrates", category: "Wisdom"},
+      {id: 14, text: "A friend is someone who knows all about you and still loves you.", author: "Elbert Hubbard", category: "Friendship"},
+      {id: 15, text: "Keep your face always toward the sunshine and shadows will fall behind you.", author: "Walt Whitman", category: "Happiness"},
+    ];
+
+    // State
+    let quotes = [...QUOTES_DATA];
+    let currentCategory = 'All';
+    let searchTerm = '';
+    let currentQuote = null;
+
+    // Get initials from name
+    function getInitials(name) {
+      return name.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    // Get random color for avatar
+    function getAvatarGradient(name) {
+      const colors = [
+        'linear-gradient(135deg, #667eea, #764ba2)',
+        'linear-gradient(135deg, #f093fb, #f5576c)',
+        'linear-gradient(135deg, #4facfe, #00f2fe)',
+        'linear-gradient(135deg, #43e97b, #38f9d7)',
+        'linear-gradient(135deg, #fa709a, #fee140)',
+        'linear-gradient(135deg, #30cfd0, #330867)',
+      ];
+      const index = name.charCodeAt(0) % colors.length;
+      return colors[index];
+    }
+
+    // Filter quotes
+    function getFilteredQuotes() {
+      let filtered = quotes;
+      
+      if (currentCategory !== 'All') {
+        filtered = filtered.filter(q => q.category === currentCategory);
+      }
+      
+      if (searchTerm) {
+        filtered = filtered.filter(q => 
+          q.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          q.author.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+      
+      return filtered;
+    }
+
+    // Render quotes
+    function renderQuotes() {
+      const grid = document.getElementById('quotesGrid');
+      const filtered = getFilteredQuotes();
+      
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="loading">No quotes found. Try a different search or category.</div>';
+        return;
+      }
+      
+      grid.innerHTML = filtered.map(quote => `
+        <div class="quote-card" data-id="${quote.id}">
+          <div class="quote-header">
+            <div class="author-avatar" style="background: ${getAvatarGradient(quote.author)}">
+              ${getInitials(quote.author)}
+            </div>
+            <div class="author-info">
+              <h3>${quote.author}</h3>
+              <span class="category-tag">${quote.category}</span>
+            </div>
+          </div>
+          <p class="quote-text">"${quote.text}"</p>
+          <div class="quote-actions">
+            <button class="action-btn" onclick="copyQuote(${quote.id})">📋 Copy</button>
+            <button class="action-btn" onclick="shareQuote(${quote.id})">📤 Share</button>
+            <button class="action-btn" onclick="showQuoteModal(${quote.id})">👁️ View</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Show quote in modal
+    function showQuoteModal(id) {
+      const quote = quotes.find(q => q.id === id);
+      if (!quote) return;
+      
+      currentQuote = quote;
+      document.getElementById('modalQuote').textContent = `"${quote.text}"`;
+      document.getElementById('modalAuthorName').textContent = quote.author;
+      document.getElementById('modalCategory').textContent = quote.category;
+      document.getElementById('modalAvatar').textContent = getInitials(quote.author);
+      document.getElementById('modalAvatar').style.background = getAvatarGradient(quote.author);
+      document.getElementById('quoteModal').classList.add('active');
+    }
+
+    // Copy quote
+    function copyQuote(id) {
+      const quote = quotes.find(q => q.id === id);
+      if (!quote) return;
+      
+      const text = `"${quote.text}" - ${quote.author}`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✅ Copied to clipboard!');
+      });
+    }
+
+    // Share quote
+    function shareQuote(id) {
+      const quote = quotes.find(q => q.id === id);
+      if (!quote) return;
+      
+      const text = `"${quote.text}" - ${quote.author}`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // Random quote
+    document.getElementById('randomBtn').addEventListener('click', () => {
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      showQuoteModal(randomQuote.id);
+    });
+
+    // Daily quote
+    document.getElementById('dailyBtn').addEventListener('click', () => {
+      const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      const dailyQuote = quotes[dayOfYear % quotes.length];
+      showQuoteModal(dailyQuote.id);
+    });
+
+    // Add quote
+    document.getElementById('addQuoteBtn').addEventListener('click', () => {
+      const text = prompt('Enter quote text:');
+      if (!text) return;
+      
+      const author = prompt('Enter author name:');
+      if (!author) return;
+      
+      const category = prompt('Enter category (Motivational, Romantic, Life, Wisdom, etc.):');
+      if (!category) return;
+      
+      const newQuote = {
+        id: Date.now(),
+        text: text,
+        author: author,
+        category: category
+      };
+      
+      quotes.unshift(newQuote);
+      renderQuotes();
+      showToast('✅ Quote added successfully!');
+    });
+
+    // Category filter
+    document.getElementById('categories').addEventListener('click', (e) => {
+      if (e.target.classList.contains('category-chip')) {
+        document.querySelectorAll('.category-chip').forEach(chip => {
+          chip.classList.remove('active');
+        });
+        e.target.classList.add('active');
+        currentCategory = e.target.dataset.category;
+        renderQuotes();
+      }
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchTerm = e.target.value;
+      renderQuotes();
+    });
+
+    // Modal controls
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('quoteModal').classList.remove('active');
+    });
+
+    document.getElementById('modalCopy').addEventListener('click', () => {
+      if (currentQuote) {
+        const text = `"${currentQuote.text}" - ${currentQuote.author}`;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('✅ Copied to clipboard!');
+        });
+      }
+    });
+
+    document.getElementById('modalShare').addEventListener('click', () => {
+      if (currentQuote) {
+        shareQuote(currentQuote.id);
+      }
+    });
+
+    document.getElementById('modalDownload').addEventListener('click', () => {
+      if (currentQuote) {
+        const data = JSON.stringify(quotes, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'quotes.json';
+        a.click();
+        showToast('✅ Quotes exported!');
+      }
+    });
+
+    // Close modal on backdrop click
+    document.getElementById('quoteModal').addEventListener('click', (e) => {
+      if (e.target.id === 'quoteModal') {
+        document.getElementById('quoteModal').classList.remove('active');
+      }
+    });
+
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      showToast('🎨 Theme toggle coming soon!');
+    });
+
+    // Initialize
+    renderQuotes();
+  </script>
+</body>
+</html>
